@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Dorado - Inicia el Día</title>
+<style>
+  body{margin:0;background:#000;color:#fff;font-family:Arial, sans-serif;overflow:hidden}
+  #fondo{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;transition:1s;background:linear-gradient(to bottom, #ff7e00, #ffcc00)}
+  #mira{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:40px;z-index:10;text-shadow:0 0 10px #000}
+  #nivel{position:fixed;top:15px;left:15px;background:rgba(0,0,0,0.7);padding:8px 14px;border-radius:20px;z-index:10;font-weight:bold;border:1px solid #d4af37}
+  #hud{position:fixed;bottom:0;width:100%;background:rgba(0,0,0,0.9);padding:20px;text-align:center;z-index:10;box-sizing:border-box;border-top:2px solid #d4af37}
+  button{padding:14px 30px;font-size:17px;background:linear-gradient(#d4af37,#aa8a2e);border:none;border-radius:10px;font-weight:bold;margin:5px;cursor:pointer;color:#000}
+  #cofre{display:none;background:rgba(212,175,55,0.15);border:2px solid #d4af37;padding:15px;border-radius:15px;margin-top:15px;animation:pop.5s}
+  @keyframes pop{from{transform:scale(.8)} to{transform:scale(1)}}
+  #pass{background:#000;padding:12px;letter-spacing:3px;border-radius:8px;font-family:monospace;color:#d4af37;border:1px dashed #d4af37}
+</style>
+</head>
+<body>
+<div id="fondo"></div>
+<div id="mira">+</div>
+<div id="nivel">Nivel 1 / 8</div>
+<div id="hud">
+  <h2 id="texto" style="margin:0 0 10px 0">Duna 1: El sol quema - Inicia tu día</h2>
+  <p id="sub" style="margin:0 0 15px 0;opacity:.8">Cada paso te acerca a tu tesoro</p>
+  <button onclick="siguiente()">AVANZAR →</button>
+  <div id="cofre">
+    <h3>🏆 ¡LLEGASTE A EL DORADO!</h3>
+    <p>Tu clave poderosa de hoy:</p>
+    <h2 id="pass"></h2>
+    <button onclick="generar()">GENERAR OTRA</button>
+    <p style="font-size:12px;opacity:.7;margin-top:10px">Guárdala - hoy será un gran día</p>
+  </div>
+</div>
+<script>
+let i=0;
+const fondos=[
+ "linear-gradient(to bottom, #001f3f, #ff7e00)",
+ "linear-gradient(to bottom, #3a1c00, #ff9a00)",
+ "linear-gradient(to bottom, #222, #555)",
+ "linear-gradient(to bottom, #2a3a00, #d4af37)",
+ "linear-gradient(to bottom, #0a3a2a, #00d4aa)",
+ "linear-gradient(to bottom, #003a3a, #00c0ff)",
+ "linear-gradient(to bottom, #3a2a00, #ffde59)",
+ "radial-gradient(circle, #ffde59 0%, #d4af37 40%, #000 80%)"
+];
+const txt=[
+ "Duna 1: El sol quema - Respira y avanza",
+ "Duna 2: Huellas en arena - Ya empezaste",
+ "Duna 3: Tormenta - Sigue firme",
+ "Duna 4: Hallas un mapa - Tu propósito",
+ "Duna 5: Sigues el mapa - Enfoque total",
+ "Duna 6: Oasis cercano - Recarga energía",
+ "Duna 7: ¡Brillo dorado! - Casi llegas",
+ "Duna 8: ¡LLEGASTE A EL DORADO! - Hoy es tuyo"
+];
+function cargar(){
+  document.getElementById("fondo").style.background=fondos[i];
+  document.getElementById("texto").innerText=txt[i];
+  document.getElementById("nivel").innerText="Nivel "+(i+1)+" / 8";
+  if(i==7){ document.getElementById("cofre").style.display="block"; generar(); }
+}
+function siguiente(){ if(i<7){ i++; cargar(); if(navigator.vibrate) navigator.vibrate(50); } }
+
+function generar(){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+  let arr=new Uint32Array(16);
+  crypto.getRandomValues(arr);
+  let p="";
+  for(let k=0;k<12;k++) p+=chars[arr[k] % chars.length];
+  document.getElementById("pass").innerText=p;
+}
+cargar();
+</script>
+</body>
+</html>
