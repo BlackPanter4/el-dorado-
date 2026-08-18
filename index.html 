@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Dorado Quantum</title>
+<style>
+  body{background:#0a0a0a;color:#f5e6a8;font-family:Inter,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .card{width:100%;max-width:420px;background:linear-gradient(180deg,#161616,#0e0e0e);border:1px solid #d4af3740;border-radius:28px;padding:28px}
+  .logo{width:120px;height:120px;margin:0 auto 16px;border-radius:50%;background:#000;border:2px solid #d4af37;display:flex;align-items:center;justify-content:center}
+  h1{text-align:center;color:#f9d878;font-size:28px;letter-spacing:3px}
+  .sub{text-align:center;color:#d4af37aa;font-size:12px;letter-spacing:6px;margin:6px 0 22px}
+  .level-tag{display:inline-block;background:#d4af371a;border:1px solid #d4af3740;color:#d4af37;border-radius:999px;padding:4px 12px;font-size:11px}
+  .story{margin:18px 0 14px;font-size:16px;line-height:1.6;color:#f5e6c8;min-height:72px}
+  .pass-box{background:#000;border:1px dashed #d4af37a0;border-radius:16px;padding:14px;margin:16px 0;text-align:center;font-family:monospace;color:#ffeaa0;font-size:18px}
+  .btn{width:100%;background:linear-gradient(180deg,#f9d878,#d4af37);color:#1a1200;border:none;border-radius:16px;padding:16px;font-weight:700;font-size:16px;cursor:pointer}
+  .progress{height:4px;background:#ffffff12;border-radius:99px;overflow:hidden;margin:18px 0}
+  .bar{height:100%;background:linear-gradient(90deg,#d4af37,#fff2a0);transition:width .5s}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">EL DORADO<br>QUANTUM</div>
+  <h1>EL DORADO</h1>
+  <div class="sub">QUANTUM</div>
+  <div style="text-align:center"><span class="level-tag" id="lvlTag">NIVEL 1 / 8</span></div>
+  <div class="progress"><div class="bar" id="bar" style="width:12.5%"></div></div>
+  <div class="story" id="story"></div>
+  <div class="pass-box" id="pass">---</div>
+  <button class="btn" id="btn" onclick="next()">INICIAR EXPEDICIÓN →</button>
+</div>
+<script>
+const niveles=["1. El sol quema — El desierto despierta.","2. Huellas en arena — Sigues marcas que no son tuyas.","3. Tormenta — El viento borra el camino.","4. Hallas un mapa — Un pergamino enterrado.","5. Sigues el mapa — El suelo suena hueco.","6. Oasis cercano — Agua y símbolo Quantum.","7. ¡Brillo dorado! — Algo refleja el sol.","8. ¡LLEGASTE A EL DORADO! — El cofre frente a ti."];
+let i=0;
+function securePassword(len=14){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%_";
+  const arr=new Uint32Array(len); crypto.getRandomValues(arr);
+  return Array.from(arr).map(x=>chars[x%chars.length]).join('');
+}
+function next(){
+  if(i<8){
+    document.getElementById('story').textContent=niveles[i];
+    document.getElementById('pass').textContent=securePassword(14+i);
+    document.getElementById('lvlTag').textContent=`NIVEL ${i+1} / 8`;
+    document.getElementById('bar').style.width=((i+1)/8*100)+'%';
+    document.getElementById('btn').textContent=i===7?'ABRIR COFRE DE ORO':'SIGUIENTE DUNA →';
+    i++;
+  } else {
+    document.getElementById('story').textContent="¡Reclamaste El Dorado!";
+    document.getElementById('pass').textContent="ELDORADO-"+securePassword(12).toUpperCase();
+    document.getElementById('btn').textContent="REINICIAR ↻"; i=0;
+  }
+  if(navigator.vibrate) navigator.vibrate(30);
+}
+next();
+</script>
+</body>
+</html>
